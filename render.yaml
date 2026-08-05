@@ -1,0 +1,5 @@
+# Render static site — month-end financial commentary hub
+staticSites:
+  - name: supercat-month-end
+    buildCommand: "true"
+    staticPublishPath: .

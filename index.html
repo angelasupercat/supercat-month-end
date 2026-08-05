@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>SuperCat · Month-End Financial Commentary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --fd: 'Geist', system-ui, sans-serif;
+      --fm: 'Geist Mono', ui-monospace, monospace;
+      --accent: #7A1218;
+      --gold: #B97727;
+      --border: #e8e4dc;
+      --text: #1a1814;
+      --muted: #8a8478;
+      --bg: #f7f5f0;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--fd); }
+    .shell { display: flex; flex-direction: column; height: 100vh; }
+    header {
+      flex: 0 0 auto;
+      padding: 14px 18px 10px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { font: 600 11px/1 var(--fm); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+    h1 { margin: 6px 0 4px; font-size: 20px; font-weight: 700; }
+    .meta { margin: 0; font: 500 12px/1.4 var(--fm); color: var(--muted); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tab {
+      appearance: none; cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: 600 13px/1 var(--fd);
+      color: var(--text);
+    }
+    .tab:hover { border-color: rgba(122,18,24,.35); }
+    .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .frame-wrap { flex: 1 1 auto; min-height: 0; background: #fff; }
+    iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+    .fallback {
+      padding: 16px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+    .fallback ul { margin: 8px 0 0; padding-left: 1.2rem; }
+    .fallback a { color: var(--accent); }
+    @media (max-width: 720px) {
+      h1 { font-size: 17px; }
+      .tab { padding: 7px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">SuperCat · FP&amp;A</div>
+      <h1>Month-End Financial Commentary</h1>
+      <p class="meta">Live hub · one tab per close · updated 2026-08-05 · internal</p>
+      <div class="tabs" role="tablist" aria-label="Report months">
+        <button type="button" class="tab active" data-period="2026-07" data-src="months/2026-07/report.html">Jul 2026</button>
+      </div>
+    </header>
+    <div class="frame-wrap">
+      <iframe id="reportFrame" title="Month-end report" src="months/2026-07/report.html"></iframe>
+    </div>
+    <div class="fallback">
+      Prefer a direct link:
+      <ul>
+          <li><strong>Jul 2026</strong> — <a href="months/2026-07/report.html" target="_blank">open report</a> · <a href="https://www.notion.so/3b3231dbcd70815f9e33ff245994ee7b" target="_blank" rel="noopener">Notion</a></li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const frame = document.getElementById('reportFrame');
+    document.querySelectorAll('.tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        frame.src = btn.dataset.src;
+      });
+    });
+  </script>
+</body>
+</html>
