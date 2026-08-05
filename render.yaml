@@ -1,5 +1,9 @@
-# Render static site — month-end financial commentary hub
-staticSites:
-  - name: supercat-month-end
+# Connect this repo in Render: New → Blueprint (or New → Static Site)
+services:
+  - type: web
+    name: supercat-month-end
+    runtime: static
+    plan: free
     buildCommand: "true"
     staticPublishPath: .
+    autoDeploy: true
