@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05",
+  "updated": "2026-09-08",
   "months": [
     {
       "period": "2026-07",
@@ -7,6 +7,13 @@
       "html": "months/2026-07/report.html",
       "notionUrl": "https://www.notion.so/3b3231dbcd70815f9e33ff245994ee7b",
       "publishedAt": "2026-08-05"
+    },
+    {
+      "period": "2026-08",
+      "label": "Aug 2026",
+      "html": "months/2026-08/report.html",
+      "notionUrl": "https://app.notion.com/p/3d5231dbcd7081838692cd3e1c62567a",
+      "publishedAt": "2026-09-08"
     }
   ]
 }

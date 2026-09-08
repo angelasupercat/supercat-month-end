@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>August 2026 Month-End — SuperCat FP&amp;A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>/* SuperCat FP&A report design system (aligned with HPMKT / CEO system) */
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --panel: #F5F4F1;
+  --border: #E8E5DE;
+  --border-light: #F0EDE6;
+  --text: #2C2925;
+  --text-secondary: #6B6660;
+  --text-muted: #9B958C;
+  --accent: #C47A4A;
+  --accent-deep: #89523B;
+  --accent-glow: rgba(196, 122, 74, 0.08);
+  --accent-border: rgba(196, 122, 74, 0.2);
+  --ok: #4A8C5C;
+  --ok-bg: #EDF7F0;
+  --ok-border: rgba(74, 140, 92, 0.2);
+  --warn: #B8863A;
+  --warn-bg: #FDF6EC;
+  --warn-border: rgba(184, 134, 58, 0.2);
+  --danger: #C0524A;
+  --danger-bg: #FDF0EF;
+  --danger-border: rgba(192, 82, 74, 0.2);
+  --info: #4A7A8C;
+  --info-bg: #EDF4F7;
+  --info-border: rgba(74, 122, 140, 0.2);
+  --fd: 'DM Sans', system-ui, sans-serif;
+  --fm: 'IBM Plex Mono', ui-monospace, monospace;
+  --r: 10px;
+  --nav-w: 220px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font: 400 14px/1.65 var(--fd);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.layout {
+  display: grid;
+  grid-template-columns: var(--nav-w) 1fr;
+  min-height: 100vh;
+}
+.nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+}
+.nav-brand {
+  font: 500 10px/1 var(--fm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.nav-title {
+  font: 700 15px/1.25 var(--fd);
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+.nav a {
+  display: block;
+  padding: 8px 10px;
+  margin: 2px 0;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.12s, color 0.12s;
+}
+.nav a:hover, .nav a.active {
+  background: var(--accent-glow);
+  color: var(--accent-deep);
+}
+.main { padding: 0 40px 64px; max-width: 960px; }
+.header {
+  padding: 40px 0 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  position: relative;
+}
+.header h1 {
+  font: 700 32px/1.15 var(--fd);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.header .lede {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 640px;
+  line-height: 1.6;
+}
+.header .meta {
+  margin-top: 12px;
+  font: 400 11px/1 var(--fm);
+  color: var(--text-muted);
+}
+.header .accent-bar {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 72px;
+  height: 2px;
+  background: var(--accent);
+}
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 20px;
+}
+.kpi.danger { border-color: var(--danger-border); background: linear-gradient(180deg, var(--danger-bg) 0%, var(--surface) 100%); }
+.kpi.warn { border-color: var(--warn-border); }
+.kpi.ok { border-color: var(--ok-border); }
+.kpi.accent { border-color: var(--accent-border); }
+.kpi-label {
+  font: 500 9px/1 var(--fm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font: 700 28px/1.1 var(--fd);
+  color: var(--text);
+}
+.kpi-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.kpi-note.danger { color: var(--danger); font-weight: 500; }
+.kpi-note.ok { color: var(--ok); font-weight: 500; }
+.section {
+  margin-bottom: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px 32px;
+  scroll-margin-top: 24px;
+}
+.section h2 {
+  font: 700 20px/1.2 var(--fd);
+  margin-bottom: 4px;
+}
+.section .section-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.prose {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.prose strong { color: var(--text); }
+.what-means {
+  margin: 16px 0;
+  padding: 14px 18px;
+  background: var(--panel);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.what-means strong { color: var(--text); }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+}
+thead { background: var(--panel); }
+th {
+  padding: 10px 12px;
+  text-align: left;
+  font: 600 10px/1 var(--fm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td strong { color: var(--text); }
+tr.row-danger { background: var(--danger-bg); }
+tr.row-warn { background: var(--warn-bg); }
+tr.row-ok { background: var(--ok-bg); }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font: 600 10px/1 var(--fm);
+  text-transform: uppercase;
+}
+.badge-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.badge-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+.badge-ok { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+.badge-info { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+.timeline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.timeline-step {
+  flex: 1;
+  min-width: 140px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+.timeline-step.active { border-color: var(--accent); background: var(--accent-glow); }
+.timeline-step .mo { font: 600 11px/1 var(--fm); color: var(--accent-deep); text-transform: uppercase; }
+.timeline-step .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 200px;
+  margin: 24px 0 8px;
+  padding: 0 4px;
+}
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 48px; }
+.chart-bar {
+  width: 100%;
+  max-width: 56px;
+  border-radius: 6px 6px 0 0;
+  background: var(--accent);
+  min-height: 4px;
+}
+.chart-bar.danger { background: var(--danger); }
+.chart-bar.warn { background: var(--warn); }
+.chart-bar.ok { background: var(--ok); }
+.chart-bar.with-inj { background: var(--info); opacity: 0.85; }
+.chart-label { font: 500 9px/1 var(--fm); color: var(--text-muted); margin-top: 8px; text-align: center; }
+.chart-val { font: 600 10px/1 var(--fm); color: var(--text-secondary); margin-bottom: 4px; }
+.floor-line {
+  position: relative;
+  border-top: 2px dashed var(--danger);
+  margin-top: -2px;
+  height: 0;
+}
+.use-funds {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.fund-block {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.fund-block.primary { background: var(--accent-glow); border-color: var(--accent-border); }
+.fund-amt { font: 700 24px/1 var(--fd); color: var(--accent-deep); }
+footer.report-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .nav { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .main { padding: 0 20px 40px; }
+}
+
+  :root {
+    --fd: 'Geist', system-ui, sans-serif;
+    --fm: 'Geist Mono', ui-monospace, monospace;
+    --accent: #7A1218;
+    --accent-deep: #5C0E12;
+    --accent-glow: rgba(122, 18, 24, 0.06);
+    --accent-border: rgba(122, 18, 24, 0.18);
+    --gold: #B97727;
+  }
+  .brand-mark { font: 600 11px/1 var(--fm); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+  .delta-pos { color: #1B7A4E; font-weight: 600; }
+  .delta-neg { color: #B42318; font-weight: 600; }
+  .delta-flat { color: var(--text-muted, #8a8478); }
+  .quick-hit {
+    background: linear-gradient(180deg, rgba(122,18,24,.04), #fff);
+    border: 1px solid var(--accent-border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 0 0 22px;
+  }
+  .quick-hit h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  .qh-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .qh-card {
+    background: #fff;
+    border: 1px solid var(--border, #e8e4dc);
+    border-radius: 10px;
+    padding: 12px 14px;
+    min-height: 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .qh-label { font: 600 11px/1.3 var(--fm); letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted, #8a8478); }
+  .qh-value { font: 700 20px/1.2 var(--fd); color: var(--text, #1a1814); }
+  .qh-mom { font: 600 13px/1.3 var(--fm); margin-top: 2px; }
+  .qh-note { font: 500 11px/1.35 var(--fm); color: var(--text-muted, #8a8478); margin-top: 2px; }
+  .quick-hit .note { margin-top: 12px; font: 500 12px/1.4 var(--fm); color: var(--text-muted, #8a8478); }
+  .exec { background: #fff; border: 1px solid var(--border, #e8e4dc); border-left: 4px solid var(--accent); border-radius: 12px; padding: 20px 22px; margin: 18px 0 24px; }
+  .exec h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+  .exec p { font-size: 15px; line-height: 1.75; color: var(--text-secondary, #3d3a34); margin: 0 0 14px; }
+  .exec p:last-child { margin-bottom: 0; }
+  .chart-box { height: 320px; position: relative; margin: 12px 0 20px; background: #fff; border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 12px; }
+  .chart-box.tall { height: 380px; }
+  .health-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 12px 0 8px; }
+  .health-card { background: #fff; border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; }
+  .health-card h3 { font-size: 13px; margin: 0 0 8px; color: var(--text); }
+  .health-card ul { margin: 0; padding-left: 1.1rem; }
+  .health-card li { font-size: 13px; line-height: 1.55; color: var(--text-secondary); margin: 4px 0; }
+  .is-table { font-size: 12px; }
+  .fc-note { font-size: 13px; color: var(--text-secondary); margin: 8px 0 14px; line-height: 1.6; }
+  .disclaimer { background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 4px solid var(--warn); border-radius: 12px; padding: 16px 20px; margin: 0 0 22px; }
+  .disclaimer h2 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--warn); margin: 0 0 10px; }
+  .disclaimer ol { margin: 0 0 8px 1.1rem; padding: 0; }
+  .disclaimer li { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 6px 0; }
+  @media (max-width: 900px) {
+    .qh-grid, .health-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="nav">
+      <div class="brand-mark">SuperCat · FP&amp;A</div>
+      <div class="nav-title">August 2026 Close</div>
+      <a href="#disclaimer">Restatement</a>
+      <a href="#quick-hit">Quick Hit</a>
+      <a href="#summary">Exec Summary</a>
+      <a href="#performance">vs Budget</a>
+      <a href="#kpis">Key Metrics</a>
+      <a href="#health">Health</a>
+      <a href="#changed">What Changed</a>
+      <a href="#pnl-snap">P&amp;L</a>
+      <a href="#cash">Cash</a>
+      <a href="#forecast">Forecast</a>
+      <a href="#risks">Risks</a>
+      <a href="#hl-pnl">Close block</a>
+    </nav>
+    <div class="main">
+      <header class="header">
+        <h1>Financial Report — August 2026</h1>
+        <p class="meta">Internal leadership · QuickBooks P&amp;L (11) · Budget (4) · Master Forecast (no new logos) · As-of 2026-09-08</p>
+        <div class="accent-bar"></div>
+      </header>
+
+      <section class="section" id="disclaimer">
+        <div class="disclaimer">
+          <h2>Restatement Disclaimer — June &amp; July 2026</h2>
+          <ol>
+            <li><strong>June — Professional Services revenue, −$5,000.</strong> Two $2,500 implementation-fee credits: Groupe Courchesne (re-invoiced in August) and Fine Art. June Net Income restated $3,697 → −$1,303.</li>
+            <li><strong>July — revenue, +$1,420</strong> (net). Two invoices didn't sync automatically from Stripe — Sauder Woodworking ($725) and Geo Contemporary ($795) — entered manually once caught.</li>
+            <li><strong>July — OpEx, +$1,479.</strong> Late-posted July activity.</li>
+            <li><strong>COGS — Mixpanel amortization.</strong> Mixpanel's annual subscription is amortized evenly across Jun–Aug.</li>
+          </ol>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:6px">Net effect: June Net Income −$1,303. July Net Income $1,143. August Net Income $5,342.</p>
+        </div>
+      </section>
+
+      <section class="section" id="quick-hit">
+        <div class="quick-hit">
+          <h2>August 2026 — Quick Hit</h2>
+          <p class="note" style="margin:0 0 12px">MoM only · green = favorable · red = deficit · vs budget lives in tables below</p>
+          <div class="qh-grid">
+
+    <div class="qh-card">
+      <div class="qh-label">💰 Revenue</div>
+      <div class="qh-value">$164.8K</div>
+      <div class="qh-mom"><span class="delta-pos">+7.6% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">🔁 Subscriptions / MRR</div>
+      <div class="qh-value">$160.8K</div>
+      <div class="qh-mom"><span class="delta-pos">+6.0% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">🛠️ Professional Services</div>
+      <div class="qh-value">$3.9K</div>
+      <div class="qh-mom"><span class="delta-pos">+172.4% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">📦 COGS</div>
+      <div class="qh-value">$17.5K</div>
+      <div class="qh-mom"><span class="delta-neg">+3.7% MoM</span></div>
+      <div class="qh-note">10.6% of rev</div>
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">📈 Gross Profit</div>
+      <div class="qh-value">$147.3K</div>
+      <div class="qh-mom"><span class="delta-pos">+8.1% MoM</span></div>
+      <div class="qh-note">GM 89.4% (+0.4 pp)</div>
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">🏢 OpEx</div>
+      <div class="qh-value">$120.0K</div>
+      <div class="qh-mom"><span class="delta-neg">+5.9% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">⚙️ Operating Profit</div>
+      <div class="qh-value">$27.3K</div>
+      <div class="qh-mom"><span class="delta-pos">+18.8% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">💸 Interest</div>
+      <div class="qh-value">$21.9K</div>
+      <div class="qh-mom"><span class="delta-neg">+0.5% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">🧾 Net Income</div>
+      <div class="qh-value">$5.3K</div>
+      <div class="qh-mom"><span class="delta-pos">+367.2% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">💵 Cash</div>
+      <div class="qh-value">$129.1K</div>
+      <div class="qh-mom"><span class="delta-neg">-9.2% MoM</span></div>
+
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">🏦 Full Debt Service</div>
+      <div class="qh-value">~$41.4K</div>
+      <div class="qh-mom"><span class="delta-flat">—</span></div>
+      <div class="qh-note">int + principal</div>
+    </div>
+
+    <div class="qh-card">
+      <div class="qh-label">📉 Δ Cash (bank)</div>
+      <div class="qh-value"><span class="delta-neg">−$13,133</span></div>
+      <div class="qh-mom"><span class="delta-pos">burn −72% vs Jul</span></div>
+      <div class="qh-note">Jul was −$46,902</div>
+    </div>
+          </div>
+          <p class="note">As reported — QuickBooks P&amp;L (11). Reflects the restated items above.</p>
+        </div>
+        <div class="chart-box"><canvas id="pnlTrendChart"></canvas></div>
+        <div class="chart-box"><canvas id="revCompareChart"></canvas></div>
+      </section>
+
+      <section class="section" id="summary">
+        <div class="exec">
+          <h2>Executive Summary</h2>
+          <p>August was a <strong>genuine recovery month</strong>, on both revenue and cost lines. Total revenue came in at <strong>$164,797</strong> (<strong>+$11,660 / +7.6% MoM</strong> off July's restated $153,138; <strong>−$1,871 / -1.1%</strong> vs. August budget $166,668) — essentially back on plan. Both subscriptions (<strong>$160,847</strong>, -0.2% vs. budget) and professional services (<strong>$3,950</strong>, up from July's depressed $1,450) recovered.</p>
+          <p><strong>COGS</strong> came in at <strong>$17,478</strong> — up <strong>+3.7% MoM</strong> and <strong>+15.5% vs. budget</strong> — reflecting Mixpanel's annual subscription amortized evenly across Jun–Aug and a modest increase in Rackspace hosting. Gross margin held essentially flat at <strong>89.4%</strong> (+0.4pp MoM), still 1.5 points under the 90.9% budget.</p>
+          <p><strong>OpEx</strong> came in at <strong>$120,032</strong> (<strong>+5.9% MoM, +9.3% vs. budget</strong>). Engineering Payroll rose to <strong>$20,419</strong> — Bruce's PTO payout, which also lifted 401(k)/benefits costs. Contract Admin Services rose to <strong>$34,999</strong> (+$1,700) because Jack Crabtree is no longer a provider. Sales Payroll increased on <strong>additional commission paid</strong>, and Show/Conference reflects the <strong>High Point Market rental</strong>. Partially offsetting: Engineering Computer &amp; Software normalized down to $3,894 as Cursor/dev-tool spend eased. <strong>Looking to September, adjustments to marketing and SaaS spend are expected to bring OpEx down to roughly $100,000.</strong></p>
+          <p>Net effect: <strong>operating profit</strong> came in at <strong>$27,287</strong> (+18.8% MoM, −34.5% vs. budget of $41,683) and <strong>net income</strong> at <strong>$5,342</strong> (+367.2% MoM, −74.8% vs. budget of $21,245).</p>
+          <p><strong>Cash</strong> — bank cash fell <strong>$142,236 → $129,103</strong> (<strong>−$13,133</strong>), a burn 72% smaller than July's −$46,902. AR collections came through (AR dropped $40,487 → $13,017), and AP was extended (+$38,322, to $50,836). AmEx was paid down sharply (−$43,792). Cash/MRR compressed further — <strong>0.94× → 0.80×</strong>.</p>
+          <p><strong>Forward look (single-track forecast, no new logos — worst case per instruction):</strong> the Master Forecast model (rebased 2026-09-08 from actual August, "New logos per month" = 0) projects <strong>September as the first month of positive cash flow without any investor injection</strong> — net change in cash of <strong>+$10,550</strong> — provided the business collects <strong>90–95% of AR invoiced for the month</strong>, alongside annual renewals and expansions landing as scheduled. From there, cash builds to <strong>~$235,779 by December</strong>.</p>
+          <p><strong>Headline:</strong> Revenue and COGS both essentially on plan; OpEx — mostly explained by Bruce's PTO payout, the Crabtree provider change, and higher sales commission — is the remaining gap, expected to ease toward $100K in September. Cash burn moderated sharply on stronger collections.</p>
+        </div>
+      </section>
+
+      <section class="section" id="performance">
+        <h2>Performance vs Budget</h2>
+        <p class="section-sub">Columns: prior month → current month → budget · MoM % · vs Budget %</p>
+        <div class="what-means">
+          <strong>Budget read:</strong> Revenue essentially on plan (−1.1%); COGS close to plan (+15.5%). The remaining budget miss on operating profit and net income is driven by <strong>OpEx</strong> (+9.3% vs. budget).
+        </div>
+        <div class="chart-box"><canvas id="budgetCompareChart"></canvas></div>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+    <th>Metric</th>
+    <th class="num">Jul Actual</th>
+    <th class="num">Aug Actual</th>
+    <th class="num">Aug Budget</th>
+    <th class="num">MoM %</th>
+    <th class="num">vs Budget %</th>
+  </tr></thead>
+          <tbody>
+            <tr>
+      <td><strong>Total revenue</strong></td>
+      <td class="num">$153,138</td>
+      <td class="num"><strong>$164,797</strong></td>
+      <td class="num">$166,668</td>
+      <td class="num"><span class="delta-pos">+7.6%</span></td>
+      <td class="num"><span class="delta-neg">-1.1%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Subscription / MRR</strong></td>
+      <td class="num">$151,688</td>
+      <td class="num"><strong>$160,847</strong></td>
+      <td class="num">$161,168</td>
+      <td class="num"><span class="delta-pos">+6.0%</span></td>
+      <td class="num"><span class="delta-neg">-0.2%</span></td>
+    </tr>
+            <tr>
+      <td>Professional services</td>
+      <td class="num">$1,450</td>
+      <td class="num">$3,950</td>
+      <td class="num">$5,500</td>
+      <td class="num"><span class="delta-pos">+172.4%</span></td>
+      <td class="num"><span class="delta-neg">-28.2%</span></td>
+    </tr>
+            <tr>
+      <td>COGS</td>
+      <td class="num">$16,858</td>
+      <td class="num">$17,478</td>
+      <td class="num">$15,135</td>
+      <td class="num"><span class="delta-neg">+3.7%</span></td>
+      <td class="num"><span class="delta-neg">+15.5%</span></td>
+    </tr>
+            <tr>
+      <td>Gross profit</td>
+      <td class="num">$136,279</td>
+      <td class="num">$147,319</td>
+      <td class="num">$151,533</td>
+      <td class="num"><span class="delta-pos">+8.1%</span></td>
+      <td class="num"><span class="delta-neg">-2.8%</span></td>
+    </tr>
+            <tr>
+      <td>Gross margin</td>
+      <td class="num">89.0%</td>
+      <td class="num">89.4%</td>
+      <td class="num">90.9%</td>
+      <td class="num"><span class="delta-pos">+0.4 pp</span></td>
+      <td class="num"><span class="delta-neg">−1.5 pp</span></td>
+    </tr>
+            <tr>
+      <td>Total expenses (OpEx)</td>
+      <td class="num">$113,305</td>
+      <td class="num">$120,032</td>
+      <td class="num">$109,850</td>
+      <td class="num"><span class="delta-neg">+5.9%</span></td>
+      <td class="num"><span class="delta-neg">+9.3%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Operating profit</strong></td>
+      <td class="num">$22,974</td>
+      <td class="num"><strong>$27,287</strong></td>
+      <td class="num">$41,683</td>
+      <td class="num"><span class="delta-pos">+18.8%</span></td>
+      <td class="num"><span class="delta-neg">-34.5%</span></td>
+    </tr>
+            <tr>
+      <td>Interest</td>
+      <td class="num">$21,831</td>
+      <td class="num">$21,945</td>
+      <td class="num">$20,438</td>
+      <td class="num"><span class="delta-neg">+0.5%</span></td>
+      <td class="num"><span class="delta-neg">+7.4%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Net income</strong></td>
+      <td class="num">$1,143</td>
+      <td class="num"><strong>$5,342</strong></td>
+      <td class="num">$21,245</td>
+      <td class="num"><span class="delta-pos">+367.2%</span></td>
+      <td class="num"><span class="delta-neg">-74.8%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Cash (close)</strong></td>
+      <td class="num">$142,236</td>
+      <td class="num"><strong>$129,103</strong></td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-neg">-9.2%</span></td>
+      <td class="num">—</td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="meta" style="margin-top:10px">Budget build (Aug): Subs = iPad $114,553 + Online $46,615; PS = Consulting $500 + iPad impl $3,500 + Online impl $1,500; OpEx recomputed line-by-line from Budget (4).xlsx with Marketing Consulting at $5,000/mo.</p>
+      </section>
+
+      <section class="section" id="kpis">
+        <h2>Key Metrics</h2>
+        <p class="section-sub">Prior → current → budget with % deltas</p>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+    <th>Metric</th>
+    <th class="num">Jul Actual</th>
+    <th class="num">Aug Actual</th>
+    <th class="num">Aug Budget</th>
+    <th class="num">MoM %</th>
+    <th class="num">vs Budget %</th>
+  </tr></thead>
+          <tbody>
+            <tr>
+      <td><strong>Total revenue</strong></td>
+      <td class="num">$153,138</td>
+      <td class="num"><strong>$164,797</strong></td>
+      <td class="num">$166,668</td>
+      <td class="num"><span class="delta-pos">+7.6%</span></td>
+      <td class="num"><span class="delta-neg">-1.1%</span></td>
+    </tr>
+            <tr>
+      <td>Subscription / MRR</td>
+      <td class="num">$151,688</td>
+      <td class="num">$160,847</td>
+      <td class="num">$161,168</td>
+      <td class="num"><span class="delta-pos">+6.0%</span></td>
+      <td class="num"><span class="delta-neg">-0.2%</span></td>
+    </tr>
+            <tr>
+      <td>ARR (trailing 6-mo avg)</td>
+      <td class="num">$1,854,693</td>
+      <td class="num">$1,847,893</td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-neg">-0.4%</span></td>
+      <td class="num">—</td>
+    </tr>
+            <tr>
+      <td>Gross margin</td>
+      <td class="num">89.0%</td>
+      <td class="num">89.4%</td>
+      <td class="num">90.9%</td>
+      <td class="num"><span class="delta-pos">+0.4 pp</span></td>
+      <td class="num"><span class="delta-neg">−1.5 pp</span></td>
+    </tr>
+            <tr>
+      <td>Operating profit</td>
+      <td class="num">$22,974</td>
+      <td class="num">$27,287</td>
+      <td class="num">$41,683</td>
+      <td class="num"><span class="delta-pos">+18.8%</span></td>
+      <td class="num"><span class="delta-neg">-34.5%</span></td>
+    </tr>
+            <tr>
+      <td>Net income</td>
+      <td class="num">$1,143</td>
+      <td class="num">$5,342</td>
+      <td class="num">$21,245</td>
+      <td class="num"><span class="delta-pos">+367.2%</span></td>
+      <td class="num"><span class="delta-neg">-74.8%</span></td>
+    </tr>
+            <tr>
+      <td>Cash (close)</td>
+      <td class="num">$142,236</td>
+      <td class="num">$129,103</td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-neg">-9.2%</span></td>
+      <td class="num">—</td>
+    </tr>
+            <tr>
+      <td>Full debt service</td>
+      <td class="num">$41,433</td>
+      <td class="num">$41,442</td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-flat">0.0%</span></td>
+      <td class="num">—</td>
+    </tr>
+            <tr>
+      <td>Δ Cash (bank)</td>
+      <td class="num">−$46,902</td>
+      <td class="num">−$13,133</td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-pos">burn -72.0%</span></td>
+      <td class="num">—</td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="meta" style="margin-top:8px">Cash / MRR: Jul 0.94× → Aug <strong>0.80×</strong>.</p>
+      </section>
+
+      <section class="section" id="health">
+        <h2>Financial Health Summary</h2>
+        <div class="health-grid">
+          <div class="health-card">
+            <h3>Strengths</h3>
+            <ul>
+              <li><strong>Revenue essentially on-plan</strong> (−1.1% vs. budget) after July's one-off-heavy miss; subs -0.2% vs. budget.</li>
+              <li><strong>COGS now close to plan</strong> (+15.5% vs. budget).</li>
+              <li>Gross margin ticked up slightly MoM (89.0% → 89.4%). Operating profit +18.8% MoM; net income more than tripled MoM.</li>
+              <li><strong>AR collections came through</strong> — AR fell $40,487 → $13,017.</li>
+              <li><strong>Cash burn shrank 72%</strong> MoM (−$13,133 vs. −$46,902). AmEx paid down sharply (−$43,792).</li>
+            </ul>
+          </div>
+          <div class="health-card">
+            <h3>Needs your attention</h3>
+            <ul>
+              <li><strong>OpEx still +9.3% vs. budget</strong> — Engineering Payroll (Bruce's PTO), Contract Admin (Crabtree exit), and Sales Payroll (commission) are the drivers. Expected to ease toward ~$100K in September with marketing/SaaS adjustments.</li>
+              <li><strong>Gross margin</strong> still 1.5pp under budget.</li>
+              <li><strong>Net income still 74.8% under budget</strong> despite the strong MoM improvement.</li>
+              <li><strong>Cash/MRR</strong> kept compressing (0.94× → 0.80×) despite the smaller dollar burn.</li>
+            </ul>
+          </div>
+          <div class="health-card">
+            <h3>Recommend</h3>
+            <ul>
+              <li>Keep an eye on expenses through the September OpEx step-down.</li>
+              <li>Continue collecting cash.</li>
+              <li>Manage to the no-new-logo worst-case forecast; it still shows recovery to ~$235K by December.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="changed">
+        <h2>What Changed · Why</h2>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Driver</th><th class="num">Jul</th><th class="num">Aug</th><th class="num">Δ $</th><th class="num">Δ %</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Total revenue</strong></td><td class="num">$153,138</td><td class="num">$164,797</td><td class="num"><span class="delta-pos">+$11,660</span></td><td class="num"><span class="delta-pos">+7.6%</span></td><td>−1.1% vs Aug budget</td></tr>
+            <tr><td>Subscription MRR</td><td class="num">$151,688</td><td class="num">$160,847</td><td class="num"><span class="delta-pos">+$9,160</span></td><td class="num"><span class="delta-pos">+6.0%</span></td><td>−0.2% vs budget — on plan</td></tr>
+            <tr><td>Professional services</td><td class="num">$1,450</td><td class="num">$3,950</td><td class="num"><span class="delta-pos">+$2,500</span></td><td class="num"><span class="delta-pos">+172.4%</span></td><td>−28.2% vs budget — still light</td></tr>
+            <tr><td>COGS</td><td class="num">$16,858</td><td class="num">$17,478</td><td class="num"><span class="delta-neg">+$620</span></td><td class="num"><span class="delta-neg">+3.7%</span></td><td>+15.5% vs budget — Mixpanel amortization + Rackspace</td></tr>
+            <tr><td>OpEx</td><td class="num">$113,305</td><td class="num">$120,032</td><td class="num"><span class="delta-neg">+$6,727</span></td><td class="num"><span class="delta-neg">+5.9%</span></td><td>+9.3% vs budget — Eng payroll (Bruce PTO), Contract Admin (Crabtree exit), Sales commission</td></tr>
+            <tr><td>Operating profit</td><td class="num">$22,974</td><td class="num">$27,287</td><td class="num"><span class="delta-pos">+$4,313</span></td><td class="num"><span class="delta-pos">+18.8%</span></td><td>−34.5% vs budget $41,683</td></tr>
+            <tr><td>Net income</td><td class="num">$1,143</td><td class="num">$5,342</td><td class="num"><span class="delta-pos">+$4,199</span></td><td class="num"><span class="delta-pos">+367.2%</span></td><td>Budget $21,245</td></tr>
+            <tr><td>Cash</td><td class="num">$142,236</td><td class="num">$129,103</td><td class="num"><span class="delta-neg">−$13,133</span></td><td class="num"><span class="delta-neg">-9.2%</span></td><td>Bank-to-bank</td></tr>
+            <tr><td>Full debt service</td><td class="num">~$41,433</td><td class="num">~$41,442</td><td class="num">flat</td><td class="num">—</td><td>Int $21,945 + prin $19,497</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="what-means" style="margin-top:14px">
+          <strong>Why:</strong> (1) Revenue rebounded sharply off July's trough, landing essentially on budget.
+          (2) COGS reflects Mixpanel's annual subscription amortized evenly across Jun–Aug plus a modest Rackspace increase.
+          (3) OpEx is the remaining pressure point — Bruce's PTO payout drove Engineering Payroll and 401(k)/benefits, Contract Admin rose on the Crabtree provider change, and Sales Payroll reflects additional commission paid; Show/Conference is the High Point Market rental.
+          (4) Operating profit and net income both improved substantially MoM.
+          (5) Cash burn moderated substantially — AR collected and AP was extended.
+        </div>
+      </section>
+
+      <section class="section" id="pnl-snap">
+        <h2>P&amp;L snapshot</h2>
+        <p class="section-sub">Revenue detail · prior → current → budget · % deltas</p>
+        <div style="overflow-x:auto">
+        <table class="is-table">
+          <thead><tr>
+    <th>Metric</th>
+    <th class="num">Jul Actual</th>
+    <th class="num">Aug Actual</th>
+    <th class="num">Aug Budget</th>
+    <th class="num">MoM %</th>
+    <th class="num">vs Budget %</th>
+  </tr></thead>
+          <tbody>
+            <tr>
+      <td>eCat (iPad)</td>
+      <td class="num">$88,362</td>
+      <td class="num">$88,965</td>
+      <td class="num">$114,553</td>
+      <td class="num"><span class="delta-pos">+0.7%</span></td>
+      <td class="num"><span class="delta-neg">-22.3%</span></td>
+    </tr>
+            <tr>
+      <td>eCat Online</td>
+      <td class="num">$37,749</td>
+      <td class="num">$40,109</td>
+      <td class="num">$46,615</td>
+      <td class="num"><span class="delta-pos">+6.3%</span></td>
+      <td class="num"><span class="delta-neg">-14.0%</span></td>
+    </tr>
+            <tr>
+      <td>Other subs (T1/T2/T3/Users)</td>
+      <td class="num">$25,576</td>
+      <td class="num">$31,774</td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-pos">+24.2%</span></td>
+      <td class="num">—</td>
+    </tr>
+            <tr>
+      <td><strong>Total subscriptions</strong></td>
+      <td class="num">$151,688</td>
+      <td class="num"><strong>$160,847</strong></td>
+      <td class="num">$161,168</td>
+      <td class="num"><span class="delta-pos">+6.0%</span></td>
+      <td class="num"><span class="delta-neg">-0.2%</span></td>
+    </tr>
+            <tr>
+      <td>Professional services</td>
+      <td class="num">$1,450</td>
+      <td class="num">$3,950</td>
+      <td class="num">$5,500</td>
+      <td class="num"><span class="delta-pos">+172.4%</span></td>
+      <td class="num"><span class="delta-neg">-28.2%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Total revenue</strong></td>
+      <td class="num">$153,138</td>
+      <td class="num"><strong>$164,797</strong></td>
+      <td class="num">$166,668</td>
+      <td class="num"><span class="delta-pos">+7.6%</span></td>
+      <td class="num"><span class="delta-neg">-1.1%</span></td>
+    </tr>
+            <tr>
+      <td>COGS</td>
+      <td class="num">$16,858</td>
+      <td class="num">$17,478</td>
+      <td class="num">$15,135</td>
+      <td class="num"><span class="delta-neg">+3.7%</span></td>
+      <td class="num"><span class="delta-neg">+15.5%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Gross profit</strong></td>
+      <td class="num">$136,279</td>
+      <td class="num"><strong>$147,319</strong></td>
+      <td class="num">$151,533</td>
+      <td class="num"><span class="delta-pos">+8.1%</span></td>
+      <td class="num"><span class="delta-neg">-2.8%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Total OpEx</strong></td>
+      <td class="num">$113,305</td>
+      <td class="num"><strong>$120,032</strong></td>
+      <td class="num">$109,850</td>
+      <td class="num"><span class="delta-neg">+5.9%</span></td>
+      <td class="num"><span class="delta-neg">+9.3%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Operating profit</strong></td>
+      <td class="num">$22,974</td>
+      <td class="num"><strong>$27,287</strong></td>
+      <td class="num">$41,683</td>
+      <td class="num"><span class="delta-pos">+18.8%</span></td>
+      <td class="num"><span class="delta-neg">-34.5%</span></td>
+    </tr>
+            <tr>
+      <td>Interest</td>
+      <td class="num">$21,831</td>
+      <td class="num">$21,945</td>
+      <td class="num">$20,438</td>
+      <td class="num"><span class="delta-neg">+0.5%</span></td>
+      <td class="num"><span class="delta-neg">+7.4%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Net income</strong></td>
+      <td class="num">$1,143</td>
+      <td class="num"><strong>$5,342</strong></td>
+      <td class="num">$21,245</td>
+      <td class="num"><span class="delta-pos">+367.2%</span></td>
+      <td class="num"><span class="delta-neg">-74.8%</span></td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="meta" style="margin-top:8px">*Budget parks migration/tier mix inside iPad/Online — compare at Total subscriptions. Budget does not separately fund T1/T2/T3/Users.</p>
+      </section>
+
+      <section class="section" id="cash">
+        <h2>Cash bridge — August 2026</h2>
+        <div class="chart-box"><canvas id="cashBridgeChart"></canvas></div>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Item</th><th class="num">Jul</th><th class="num">Aug</th><th class="num">Δ</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Bank close</td><td class="num">$142,236</td><td class="num"><strong>$129,103</strong></td><td class="num"><span class="delta-neg">−$13,133</span></td><td>Financial results (24)</td></tr>
+            <tr><td>Net income (accrual)</td><td class="num">$1,143</td><td class="num">$5,342</td><td class="num"><span class="delta-pos">+$4,199</span></td><td>P&amp;L</td></tr>
+            <tr><td>Full debt service</td><td class="num">~$41,433</td><td class="num">~$41,442</td><td class="num"><span class="delta-flat">flat</span></td><td>Int $21,945 + prin $19,497</td></tr>
+            <tr><td>Deferred revenue</td><td class="num">$100,429</td><td class="num">$80,734</td><td class="num"><span class="delta-neg">−$19,695</span></td><td>BS</td></tr>
+            <tr><td>AmEx</td><td class="num">$56,415</td><td class="num">$12,624</td><td class="num"><span class="delta-pos">−$43,792</span></td><td>Paydown</td></tr>
+            <tr><td>Accounts receivable</td><td class="num">$40,487</td><td class="num">$13,017</td><td class="num"><span class="delta-pos">−$27,470</span></td><td>Collected</td></tr>
+            <tr><td>Accounts payable</td><td class="num">$12,513</td><td class="num">$50,836</td><td class="num"><span class="delta-warn" style="color:var(--warn);font-weight:600">+$38,322</span></td><td>Extended</td></tr>
+            <tr><td>Cash / MRR</td><td class="num">0.94×</td><td class="num"><strong>0.80×</strong></td><td class="num">—</td><td>Tightening despite smaller burn</td></tr>
+            <tr><td>Fathom FCF (in-product)</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>Bank Δ used</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section class="section" id="forecast">
+        <h2>Forward Projection — Master Forecast (no new logos — worst case)</h2>
+        <p class="fc-note"><strong>Single-track forecast</strong> this month, per instruction: the old two-file "Migration + New Logos" vs. "Main Forecast" structure has been replaced by one consolidated model, with the "New logos per month" lever set to <strong>0</strong> — the worst case, since no logos have been signing. Migration assumptions inside the model are unchanged from the prior basis. NI &amp; cash from the model's own Cash Flow Statement; <strong>FCF = closing cash − opening cash</strong>.</p>
+        <div class="what-means" style="margin:0 0 14px">
+          <strong>Rebased 2026-09-08 from actual August</strong> — the model's opening cash and Net Income now tie exactly to this month's actuals ($129,103 close, −$13,133 Δ cash).
+        </div>
+        <div class="chart-box tall"><canvas id="forecastCashChart"></canvas></div>
+        <div class="chart-box"><canvas id="forecastNiChart"></canvas></div>
+        <h3 style="margin:18px 0 8px;font-size:15px">Master Forecast — no new logos — Aug–Dec</h3>
+        <div style="overflow-x:auto">
+        <table class="is-table">
+          <thead><tr><th>Metric</th><th class="num">Aug (actual)</th><th class="num">Sep (fcst)</th><th class="num">Oct (fcst)</th><th class="num">Nov (fcst)</th><th class="num">Dec (fcst)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Net Income (CF)</strong></td><td class="num"><span class="delta-pos">$5,342</span></td><td class="num"><span class="delta-pos">$19,637</span></td><td class="num"><span class="delta-pos">$45,288</span></td><td class="num"><span class="delta-pos">$52,357</span></td><td class="num"><span class="delta-pos">$50,719</span></td></tr>
+            <tr><td><strong>Cash close</strong></td><td class="num">$129,103</td><td class="num">$139,653</td><td class="num">$158,479</td><td class="num">$183,532</td><td class="num">$235,779</td></tr>
+            <tr><td><strong>FCF (Δ cash)</strong></td><td class="num"><span class="delta-neg">−$13,133</span></td><td class="num"><span class="delta-pos">$10,550</span></td><td class="num"><span class="delta-pos">$18,827</span></td><td class="num"><span class="delta-pos">$25,053</span></td><td class="num"><span class="delta-pos">$52,248</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="fc-note" style="margin-top:16px"><strong>September is projected as the first month of positive cash flow without any investor injection</strong> (+$10,550), provided the business collects <strong>90–95% of AR invoiced for the month</strong>, alongside annual renewals and expansions landing as scheduled. Even under a <strong>zero-new-logo assumption</strong>, cash builds to <strong>~$235,779 by December</strong> — driven mainly by collections and annual-renewal timing, not new bookings.</p>
+      </section>
+
+      <section class="section" id="risks">
+        <h2>Risks &amp; Actions</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="health-card">
+            <h3>Watchouts</h3>
+            <ul>
+              <li>Cash/MRR trending down (0.94× → 0.80×) despite a smaller dollar burn</li>
+              <li>September's projected positive cash flow depends on collecting 90–95% of AR invoiced plus renewals/expansions landing on schedule</li>
+              <li>Worst-case (no-new-logo) is the plan of record — no cushion if signings stay at zero</li>
+              <li>OpEx still above budget, though expected to ease toward ~$100K in September</li>
+            </ul>
+          </div>
+          <div class="health-card">
+            <h3>Recommended actions</h3>
+            <ul>
+              <li>Keep an eye on expenses</li>
+              <li>Continue collecting cash</li>
+              <li>Track logo pipeline — modeled cash recovery relies on renewal timing, not new bookings</li>
+            </ul>
+          </div>
+        </div>
+        <p class="meta" style="margin-top:14px"><strong>Data gaps:</strong> Fathom in-product FCF view not pulled this cycle (bank Δ used). Logo pipeline status not in this data cut.</p>
+      </section>
+
+      <section class="section" id="hl-pnl">
+        <h2>High-level P&amp;L &amp; Cash on Hand</h2>
+        <p class="section-sub">Locked close block · prior → current → budget · % deltas</p>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+    <th>Metric</th>
+    <th class="num">Jul Actual</th>
+    <th class="num">Aug Actual</th>
+    <th class="num">Aug Budget</th>
+    <th class="num">MoM %</th>
+    <th class="num">vs Budget %</th>
+  </tr></thead>
+          <tbody>
+            <tr>
+      <td><strong>Total revenue</strong></td>
+      <td class="num">$153,138</td>
+      <td class="num"><strong>$164,797</strong></td>
+      <td class="num">$166,668</td>
+      <td class="num"><span class="delta-pos">+7.6%</span></td>
+      <td class="num"><span class="delta-neg">-1.1%</span></td>
+    </tr>
+            <tr>
+      <td>Gross profit</td>
+      <td class="num">$136,279</td>
+      <td class="num">$147,319</td>
+      <td class="num">$151,533</td>
+      <td class="num"><span class="delta-pos">+8.1%</span></td>
+      <td class="num"><span class="delta-neg">-2.8%</span></td>
+    </tr>
+            <tr>
+      <td>Operating profit</td>
+      <td class="num">$22,974</td>
+      <td class="num">$27,287</td>
+      <td class="num">$41,683</td>
+      <td class="num"><span class="delta-pos">+18.8%</span></td>
+      <td class="num"><span class="delta-neg">-34.5%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Net income</strong></td>
+      <td class="num">$1,143</td>
+      <td class="num"><strong>$5,342</strong></td>
+      <td class="num">$21,245</td>
+      <td class="num"><span class="delta-pos">+367.2%</span></td>
+      <td class="num"><span class="delta-neg">-74.8%</span></td>
+    </tr>
+            <tr>
+      <td><strong>Cash on hand</strong></td>
+      <td class="num">$142,236</td>
+      <td class="num"><strong>$129,103</strong></td>
+      <td class="num">—</td>
+      <td class="num"><span class="delta-neg">-9.2%</span></td>
+      <td class="num">—</td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="meta" style="margin-top:14px">Sources: SuperCat Solutions, LLC_Profit and Loss (11).csv (QuickBooks) · SuperCat Solutions, LLC Budget (4).xlsx · SuperCat_Master_Forecast_with_Tracking_1.xlsx (Google Drive) · Generated 2026-09-08</p>
+      </section>
+    </div>
+  </div>
+
+<script>
+const GOLD = '#B97727';
+const ACCENT = '#7A1218';
+const MUTED = '#8a8478';
+const TEAL = '#5B8A7A';
+Chart.defaults.font.family = "'Geist', system-ui, sans-serif";
+Chart.defaults.color = '#5c574e';
+
+new Chart(document.getElementById('pnlTrendChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Revenue', 'OpEx', 'Op Profit', 'Net Income'],
+    datasets: [
+      { label: 'Jul', data: [153137.62, 113305.19, 22974.25, 1143.49], backgroundColor: MUTED },
+      { label: 'Aug', data: [164797.42, 120032.27, 27287.12, 5342.45], backgroundColor: ACCENT },
+      { label: 'Aug Budget', data: [166668, 109850, 41683, 21245], backgroundColor: GOLD }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'P&L — prior → current → budget' }, legend: { position: 'bottom' } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+
+new Chart(document.getElementById('revCompareChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Jul actual', 'Aug actual', 'Aug budget'],
+    datasets: [{ label: 'Revenue', data: [153137.62, 164797.42, 166668], backgroundColor: [MUTED, ACCENT, GOLD] }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Revenue — as reported' }, legend: { display: false } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+
+new Chart(document.getElementById('budgetCompareChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Revenue', 'Subscriptions', 'PS', 'OpEx', 'Op Profit', 'NI'],
+    datasets: [
+      { label: 'Jul', data: [153137.62, 151687.62, 1450, 113305.19, 22974.25, 1143.49], backgroundColor: MUTED },
+      { label: 'Aug', data: [164797.42, 160847.42, 3950, 120032.27, 27287.12, 5342.45], backgroundColor: ACCENT },
+      { label: 'Aug Budget', data: [166668, 161168, 5500, 109850, 41683, 21245], backgroundColor: GOLD }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Prior → current → budget' }, legend: { position: 'bottom' } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+
+new Chart(document.getElementById('cashBridgeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Δ Cash (bank)', 'NI (accrual)', 'Full debt service', 'Deferred rev Δ', 'AR Δ', 'AP Δ'],
+    datasets: [{ data: [-13133.02, 5342.45, -41441.83, -19694.76, 27469.50, 38322.47],
+      backgroundColor: ['#7A1218', '#5B8A7A', '#7A1218', '#B97727', '#5B8A7A', '#B97727'] }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Cash bridge components (August)' }, legend: { display: false } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+
+new Chart(document.getElementById('forecastCashChart'), {
+  type: 'line',
+  data: {
+    labels: ["Aug","Sep","Oct","Nov","Dec"],
+    datasets: [
+      { label: 'Master Forecast — no new logos', data: [129102.75,139652.6197,158479.3125,183531.8895,235779.4988], borderColor: ACCENT, backgroundColor: 'rgba(122,18,24,.08)', fill: true, tension: 0.25 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Closing cash — Aug–Dec forecast (no new logos)' }, legend: { position: 'bottom' } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+
+new Chart(document.getElementById('forecastNiChart'), {
+  type: 'line',
+  data: {
+    labels: ["Aug","Sep","Oct","Nov","Dec"],
+    datasets: [
+      { label: 'Net Income (CF)', data: [5342.45,19636.87547,45287.77714,52357.46769,50719.46195], borderColor: ACCENT, tension: 0.25 },
+      { label: 'FCF (Δ cash)', data: [-13133.02,10549.86973,18826.6928,25052.57696,52247.6093], borderColor: TEAL, tension: 0.25 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Net income (CF) & FCF (Δ cash) — Aug–Dec' }, legend: { position: 'bottom' } },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+});
+</script>
+</body>
+</html>
